@@ -1,0 +1,81 @@
+/* ==========================================================
+   STYLE. Colours live in :root: change them to restyle everything.
+   ========================================================== */
+:root{
+  --ink:#1a0f24; --rose:#ff5d8f; --apricot:#ffb36b; --cream:#fff4ea;
+  --serif:"Fraunces",Georgia,serif; --sans:"DM Sans",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:var(--ink);color:var(--cream);font-family:var(--sans);overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--apricot);outline-offset:2px}
+
+/* progress bars */
+#bars{position:fixed;top:0;left:10px;right:10px;display:flex;gap:4px;z-index:20;padding-top:calc(10px + env(safe-area-inset-top,0px))}
+#bars i{flex:1;height:3px;border-radius:3px;background:rgba(255,244,234,.25);overflow:hidden;position:relative}
+#bars i::after{content:"";position:absolute;inset:0;background:var(--cream);transform:scaleX(0);transform-origin:left}
+#bars i.done::after{transform:scaleX(1)}
+#bars i.run{animation:end linear forwards}
+#bars i.run::after{animation:fill linear forwards;animation-duration:inherit}
+#bars.paused i.run,#bars.paused i.run::after{animation-play-state:paused}
+@keyframes fill{to{transform:scaleX(1)}}
+@keyframes end{to{opacity:1}}   /* its animationend event triggers the next slide */
+
+/* slides: each gets its own colour mood from --hue */
+.slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;
+  transition:opacity .6s,visibility .6s;
+  background:radial-gradient(120% 80% at 20% 0%,hsl(calc(var(--hue) + 300) 70% 32%),transparent 60%),
+             radial-gradient(100% 70% at 100% 100%,hsl(calc(var(--hue) + 340) 80% 40%),transparent 60%),var(--ink)}
+.slide.on{opacity:1;visibility:visible}
+.inner{width:100%;max-width:520px;max-height:100%;padding:76px 28px 60px;text-align:center;overflow-y:auto}
+.slide.on .inner > *{animation:rise .7s both}
+.slide.on .inner > *:nth-child(2){animation-delay:.15s}
+.slide.on .inner > *:nth-child(3){animation-delay:.3s}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}}
+
+/* type */
+h1,h2,blockquote{font-family:var(--serif);font-weight:600;line-height:1.05}
+h1.big{font-size:clamp(3.2rem,16vw,5.5rem);letter-spacing:-.03em}
+h2{font-size:clamp(1.8rem,8vw,2.6rem);margin-bottom:20px}
+h2.big.small{font-size:clamp(2rem,9vw,3rem);font-style:italic}
+.lead{font-size:1.15rem;margin:14px 0;color:var(--apricot);font-weight:600}
+blockquote{font-size:clamp(1.5rem,6.5vw,2.2rem);font-style:italic;font-weight:500;line-height:1.25;margin-top:18px}
+p{line-height:1.5;margin:8px 0}
+.cue{margin-top:30px;font-size:.9rem;opacity:.7}
+
+/* timeline */
+.tl{list-style:none;text-align:left;border-left:2px solid var(--rose);padding-left:18px;margin-left:8px}
+.tl li{margin-bottom:22px;position:relative}
+.tl li::before{content:"";position:absolute;left:-25px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--rose);box-shadow:0 0 0 4px rgba(255,93,143,.25)}
+.tl time{display:block;font-size:.8rem;color:var(--apricot)}
+.tl b{display:block;font-family:var(--serif);font-size:1.25rem;margin:2px 0}
+.tl span{opacity:.85;line-height:1.45}
+
+/* stats */
+.stats{display:grid;gap:14px}
+.stat{text-align:left;border-bottom:1px solid rgba(255,244,234,.2);padding-bottom:12px}
+.stat strong{font-family:var(--serif);font-size:3rem;color:var(--apricot);line-height:1}
+.stat span{display:block;opacity:.85}
+
+/* gallery */
+.gallery{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 28px 14px;margin:0 -28px}
+.gallery figure{flex:0 0 78%;scroll-snap-align:center}
+.gallery img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:14px;background:#3a2650;transform:rotate(-1.5deg)}
+.gallery figure:nth-child(even) img{transform:rotate(1.5deg)}
+.para{font-size:1.02rem;margin:0 0 22px;text-align:left}
+
+/* soundtrack */
+.song{text-align:left;margin:18px 0}
+.song em{opacity:.7}
+.song iframe{width:100%;border:0;border-radius:12px;margin-top:6px}
+
+/* finale */
+.again{margin-top:22px;padding:12px 24px;border:2px solid var(--cream);border-radius:99px;background:none}
+#hearts span{position:fixed;bottom:-40px;color:var(--rose);animation:float 7s linear forwards;z-index:5;pointer-events:none}
+@keyframes float{to{transform:translateY(-110vh) rotate(40deg);opacity:0}}
+
+/* tap zones: narrow edges so the player and gallery stay usable */
+#prev,#next{position:fixed;top:56px;bottom:0;width:12%;background:none;border:0;z-index:10;-webkit-tap-highlight-color:transparent}
+#prev{left:0}#next{right:0}
+
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
